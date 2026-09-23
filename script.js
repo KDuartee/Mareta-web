@@ -99,10 +99,23 @@ function setBuilderStep(step) {
 }
 
 function updateOrderLink() {
-  const english = currentLang === 'en';
-  const display = (items) => items.map((item) => english ? (ingredientEnglish[item] || item) : item).join(', ');
-  const message = [english ? 'Hi Mareta 🌊, I would like to order my custom bowl:' : 'Hola Mareta 🌊, quiero ordenar mi bowl personalizado:', `Bases: ${selectedBase.length ? display(selectedBase) : (english ? 'None selected' : 'Sin base seleccionada')}`, `${english ? 'Protein' : 'Proteína'}: ${english ? ingredientEnglish[selectedProtein] : selectedProtein}`, `${english ? 'Toppings' : 'Toppings'}: ${selectedToppings.length ? display(selectedToppings) : (english ? 'None' : 'Ninguno')}`, `${english ? 'Dressings' : 'Aderezos'}: ${selectedDressings.length ? display(selectedDressings) : (english ? 'None' : 'Ninguno')}`].join('\n');
+  const message = [
+    'Hola Mareta, quiero ordenar mi bowl personalizado:',
+    `Bases: ${selectedBase.length ? selectedBase.join(', ') : 'Sin base seleccionada'}`,
+    `Proteína: ${selectedProtein}`,
+    `Toppings: ${selectedToppings.length ? selectedToppings.join(', ') : 'Ninguno'}`,
+    `Aderezos: ${selectedDressings.length ? selectedDressings.join(', ') : 'Ninguno'}`,
+  ].join('\n');
   const orderLink = $('.bowl-preview .button'); if (orderLink) orderLink.href = waLink(message);
+}
+
+function normalizeWhatsAppLinks() {
+  const defaultMessage = waLink('Hola Mareta, quiero hacer un pedido.');
+  const questionMessage = waLink('Hola Mareta, tengo una duda.');
+  $$('a[href*="wa.me/"]').forEach((link) => {
+    if (link.matches('.bowl-preview .button')) return;
+    link.href = link.closest('.menu-section') ? questionMessage : defaultMessage;
+  });
 }
 
 function setText(selector, value, html = false) { const node = $(selector); if (!node) return; if (html) node.innerHTML = value; else node.textContent = value; }
@@ -120,6 +133,9 @@ function applyLanguage(lang) {
   setText('.map-label small', 'Guaymas, Sonora ↗'); setText('#lang-toggle', copy.langButton); $('#lang-toggle')?.setAttribute('aria-label', lang === 'en' ? 'Switch to Spanish' : 'Cambiar a inglés');
   $$('[data-i18n]').forEach((node) => { const value = ui[node.dataset.i18n]; if (value !== undefined) node.textContent = value; });
   $$('[data-i18n-html]').forEach((node) => { const value = ui[node.dataset.i18nHtml]; if (value !== undefined) node.innerHTML = value; });
+  const heroCta = $('.hero-actions .button');
+  if (heroCta) { heroCta.textContent = currentLang === 'en' ? 'Build yours →' : 'Arma el tuyo →'; heroCta.href = '#arma'; heroCta.removeAttribute('target'); heroCta.removeAttribute('rel'); }
+  normalizeWhatsAppLinks();
   renderMenu(); renderBuilder();
 }
 

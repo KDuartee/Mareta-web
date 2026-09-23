@@ -117,3 +117,23 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--yellow); outlin
   .poke-badge strong { margin: 7px 0 12px; }
   .footer { padding-bottom: 92px; }
 }
+
+/* Balanced mobile spacing */
+@media (max-width: 800px) {
+  .hero { padding-top: 48px; padding-bottom: 52px; gap: 24px; }
+  .hero-copy > p { margin-top: 18px; margin-bottom: 20px; }
+  .hero-actions { margin-bottom: 22px; }
+  .section-pad { padding-top: 64px; padding-bottom: 64px; }
+  .section-heading { margin-bottom: 24px; }
+  .builder { padding-top: 58px; }
+  .experience, .visit { gap: 28px; }
+}
+@media (max-width: 520px) {
+  .hero { padding-top: 36px; padding-bottom: 42px; }
+  .hero-visual { margin-top: 0; }
+  .hero-meta { gap: 8px; }
+  .section-pad { padding-top: 54px; padding-bottom: 54px; }
+  .builder { padding-top: 48px; }
+  .builder-card { margin-top: 6px; }
+  .experience-image { margin-bottom: 4px; }
+}
