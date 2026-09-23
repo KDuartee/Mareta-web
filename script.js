@@ -1,4 +1,7 @@
 const PHONE_NUMBER = '526221727191';
+const ADDRESS_TEXT = 'W3F8+VP · Guaymas, Sonora';
+const MAP_URL = 'https://www.google.com/maps/search/?api=1&query=W3F8%2BVP%20Guaymas%2C%20Sonora';
+const MAP_EMBED_URL = 'https://www.google.com/maps?q=W3F8%2BVP%20Guaymas%2C%20Sonora&output=embed';
 const menu = [
   { category: 'Favoritos Mareta', items: [
     ['Bowl Mareta', 'Arroz, salmón, mango, edamames, aguacate y aderezo ponzu.', '$189', 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=85', 'Más pedido'],
@@ -118,6 +121,13 @@ function normalizeWhatsAppLinks() {
   });
 }
 
+function normalizeMapLinks() {
+  $$('a[href*="maps.app.goo.gl"], a[href*="google.com/maps"]').forEach((link) => { link.href = MAP_URL; });
+  const frame = $('.map-card iframe');
+  if (frame) frame.src = MAP_EMBED_URL;
+  setText('.location-name', ADDRESS_TEXT);
+}
+
 function setText(selector, value, html = false) { const node = $(selector); if (!node) return; if (html) node.innerHTML = value; else node.textContent = value; }
 
 function applyLanguage(lang) {
@@ -136,6 +146,7 @@ function applyLanguage(lang) {
   const heroCta = $('.hero-actions .button');
   if (heroCta) { heroCta.textContent = currentLang === 'en' ? 'Build yours →' : 'Arma el tuyo →'; heroCta.href = '#arma'; heroCta.removeAttribute('target'); heroCta.removeAttribute('rel'); }
   normalizeWhatsAppLinks();
+  normalizeMapLinks();
   renderMenu(); renderBuilder();
 }
 
