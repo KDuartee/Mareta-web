@@ -92,7 +92,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--yellow); outlin
 .map-card iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .map-grid, .map-pin { display: none; }
 .map-label { z-index: 2; }
-.info-row .info-button { display: inline-flex; margin-top: 10px; padding: 9px 13px; font-size: 11px; }
+.info-row .info-button { display: inline-flex; margin-top: 10px; padding: 9px 13px; font-size: 11px; color: var(--navy); }
 .poke-badge { width: auto; height: auto; margin: 0; border-radius: 0; background: transparent; color: var(--coral); text-align: left; transform: none; box-shadow: none; display: block; }
 .poke-badge span:first-child { color: var(--coral); }
 .poke-badge strong { display: block; color: var(--navy); font-size: clamp(56px, 8vw, 96px); line-height: .82; margin: 10px 0 18px; }
@@ -104,4 +104,16 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--yellow); outlin
   .floating-wa { right: 14px; bottom: max(14px, env(safe-area-inset-bottom)); width: 48px; height: 48px; min-height: 48px; padding: 0; justify-content: center; }
   .floating-wa span { display: none; }
   .floating-wa svg { width: 23px; height: 23px; }
+}
+
+/* Mobile polish */
+.marquee div { animation-duration: 14s; }
+.brand-mark { flex: 0 0 44px; width: 44px; height: 44px; background-size: contain; background-repeat: no-repeat; background-position: center; }
+.poke-education { gap: 42px; }
+@media (max-width: 520px) {
+  .marquee div { animation-duration: 10s; }
+  .brand-mark { flex: 0 0 44px; width: 44px; height: 44px; }
+  .poke-education { gap: 20px; padding-top: 54px; padding-bottom: 54px; }
+  .poke-badge strong { margin: 7px 0 12px; }
+  .footer { padding-bottom: 92px; }
 }
