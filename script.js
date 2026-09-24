@@ -24,6 +24,13 @@ const proteins = sortIngredients(['Atún', 'Salmón', 'Marlín ahumado', 'Pollo 
 const toppings = sortIngredients(['Pepino', 'Zanahoria', 'Piña', 'Mango', 'Cebolla morada', 'Edamames', 'Tomate cherry', 'Elote amarillo', 'Champiñones', 'Brócoli', 'Cebollín', 'Betabel', 'Aguacate', 'Philadelphia', 'Arándanos', 'Quinoa', 'Chile güero', 'Toreado', 'Espinaca', 'Lechuga']);
 const dressings = sortIngredients(['Chipotle', 'Serrano y cebolla tatemada', 'Ajo y cebolla', 'Habanero', 'Ponzu']);
 const crunch = sortIngredients(['Betabel crispy', 'Cebolla crispy', 'Coco tostado', 'Crutones', 'Jalapeño crispy']);
+const spritePositions = {
+  bases: { Arroz: 0, Espinaca: 1, Lechuga: 2, Pepino: 3, Quinoa: 4 },
+  proteins: { Atún: 0, Salmón: 1, 'Marlín ahumado': 2, 'Pollo grill': 3, 'Pollo encacahuatado': 4, Tampico: 5, Papada: 6 },
+  toppings: { Pepino: 0, Zanahoria: 1, Piña: 2, Mango: 3, 'Cebolla morada': 4, Edamames: 5, 'Tomate cherry': 6, 'Elote amarillo': 7, Champiñones: 8, Brócoli: 9, Cebollín: 10, Betabel: 11, Aguacate: 12, Philadelphia: 13, Arándanos: 14, Quinoa: 15, 'Chile güero': 16, Toreado: 16, Espinaca: 17, Lechuga: 17 },
+  dressings: { Chipotle: 0, 'Serrano y cebolla tatemada': 1, 'Ajo y cebolla': 2, Habanero: 3, Ponzu: 4 },
+  crunch: { 'Cebolla crispy': 0, 'Betabel crispy': 1, Crutones: 2, 'Jalapeño crispy': 3, 'Coco tostado': 4 },
+};
 
 const translations = {
   es: {
@@ -53,6 +60,11 @@ const ingredientTone = (ingredient) => {
   if (/mango|piña|zanahoria|elote|coco/.test(name)) return 'yellow';
   if (/arroz|quinoa|crutón|ajo|philadelphia/.test(name)) return 'cream';
   return 'dark';
+};
+
+const spriteClass = (step, ingredient) => {
+  const category = ['bases', 'proteins', 'toppings', 'dressings', 'crunch'][step];
+  return `sprite-${category}-${spritePositions[category]?.[ingredient] ?? 0}`;
 };
 
 const uiCopy = {
@@ -90,7 +102,7 @@ function renderBuilder() {
   const options = $('.builder-options');
   if (!options) return;
   const copy = translations[currentLang]; const values = [bases, proteins, toppings, dressings, crunch][builderStep]; const selected = [selectedBase, selectedProtein, selectedToppings, selectedDressings, selectedCrunch][builderStep]; const title = builderStep === 4 ? (currentLang === 'en' ? 'Choose your crunch' : 'Elige tu crujiente') : copy.choose[builderStep]; const instructions = builderStep === 4 ? (currentLang === 'en' ? 'Add texture with your favorite crunchy topping.' : 'Agrega textura con tu crujiente favorito.') : copy.instructions[builderStep]; const isSelected = (value) => Array.isArray(selected) ? selected.includes(value) : selected === value;
-  options.innerHTML = `<h3>${title}</h3><p class="muted">${instructions}</p><div class="pills">${values.map((value) => { const label = currentLang === 'en' ? (ingredientEnglish[value] || value) : value; return `<button class="pill ingredient-option ${isSelected(value) ? 'selected' : ''}" type="button" aria-pressed="${isSelected(value)}" data-option="${value}"><span class="ingredient-thumb tone-${ingredientTone(value)}" aria-hidden="true"></span><span class="ingredient-label">${label}</span><span class="pill-check" aria-hidden="true">${isSelected(value) ? '✓' : ''}</span></button>`; }).join('')}</div>${builderStep < 4 ? `<button class="next-step" type="button">${copy.next}</button>` : ''}`;
+  options.innerHTML = `<h3>${title}</h3><p class="muted">${instructions}</p><div class="pills">${values.map((value) => { const label = currentLang === 'en' ? (ingredientEnglish[value] || value) : value; return `<button class="pill ingredient-option ${isSelected(value) ? 'selected' : ''}" type="button" aria-pressed="${isSelected(value)}" data-option="${value}"><span class="ingredient-thumb sprite ${spriteClass(builderStep, value)} tone-${ingredientTone(value)}" aria-hidden="true"></span><span class="ingredient-label">${label}</span><span class="pill-check" aria-hidden="true">${isSelected(value) ? '✓' : ''}</span></button>`; }).join('')}</div>${builderStep < 4 ? `<button class="next-step" type="button">${copy.next}</button>` : ''}`;
   $$('.pill', options).forEach((button) => button.addEventListener('click', () => selectIngredient(button.dataset.option)));
   $('.next-step', options)?.addEventListener('click', () => setBuilderStep(builderStep + 1));
   $('.bowl-count').textContent = `${selectedToppings.length}/4 toppings`;
