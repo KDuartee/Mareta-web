@@ -23,6 +23,7 @@ const bases = sortIngredients(['Arroz', 'Espinaca', 'Lechuga', 'Pepino', 'Quinoa
 const proteins = sortIngredients(['Atún', 'Salmón', 'Marlín ahumado', 'Pollo grill', 'Pollo encacahuatado', 'Tampico', 'Papada']);
 const toppings = sortIngredients(['Pepino', 'Zanahoria', 'Piña', 'Mango', 'Cebolla morada', 'Edamames', 'Tomate cherry', 'Elote amarillo', 'Champiñones', 'Brócoli', 'Cebollín', 'Betabel', 'Aguacate', 'Philadelphia', 'Arándanos', 'Quinoa', 'Chile güero', 'Toreado', 'Espinaca', 'Lechuga']);
 const dressings = sortIngredients(['Chipotle', 'Serrano y cebolla tatemada', 'Ajo y cebolla', 'Habanero', 'Ponzu']);
+const crunch = sortIngredients(['Betabel crispy', 'Cebolla crispy', 'Coco tostado', 'Crutones', 'Jalapeño crispy']);
 
 const translations = {
   es: {
@@ -40,7 +41,18 @@ const menuEnglish = {
 };
 
 const ingredientEnglish = {
-  Arroz: 'Rice', Espinaca: 'Spinach', Lechuga: 'Lettuce', Pepino: 'Cucumber', Quinoa: 'Quinoa', Atún: 'Tuna', Salmón: 'Salmon', 'Marlín ahumado': 'Smoked marlin', 'Pollo grill': 'Grilled chicken', 'Pollo encacahuatado': 'Peanut chicken', Tampico: 'Tampico', Papada: 'Pork jowl', Zanahoria: 'Carrot', Piña: 'Pineapple', Mango: 'Mango', 'Cebolla morada': 'Red onion', Edamames: 'Edamame', 'Tomate cherry': 'Cherry tomato', 'Elote amarillo': 'Sweet corn', Champiñones: 'Mushrooms', Brócoli: 'Broccoli', Cebollín: 'Green onion', Betabel: 'Beet', Aguacate: 'Avocado', Philadelphia: 'Cream cheese', Arándanos: 'Cranberries', 'Chile güero': 'Yellow chili', Toreado: 'Toreado pepper', Chipotle: 'Chipotle', 'Serrano y cebolla tatemada': 'Serrano and charred onion', 'Ajo y cebolla': 'Garlic and onion', Habanero: 'Habanero', Ponzu: 'Ponzu',
+  Arroz: 'Rice', Espinaca: 'Spinach', Lechuga: 'Lettuce', Pepino: 'Cucumber', Quinoa: 'Quinoa', Atún: 'Tuna', Salmón: 'Salmon', 'Marlín ahumado': 'Smoked marlin', 'Pollo grill': 'Grilled chicken', 'Pollo encacahuatado': 'Peanut chicken', Tampico: 'Tampico', Papada: 'Pork jowl', Zanahoria: 'Carrot', Piña: 'Pineapple', Mango: 'Mango', 'Cebolla morada': 'Red onion', Edamames: 'Edamame', 'Tomate cherry': 'Cherry tomato', 'Elote amarillo': 'Sweet corn', Champiñones: 'Mushrooms', Brócoli: 'Broccoli', Cebollín: 'Green onion', Betabel: 'Beet', Aguacate: 'Avocado', Philadelphia: 'Cream cheese', Arándanos: 'Cranberries', 'Chile güero': 'Yellow chili', Toreado: 'Toreado pepper', 'Betabel crispy': 'Crispy beet', 'Cebolla crispy': 'Crispy onion', 'Coco tostado': 'Toasted coconut', Crutones: 'Croutons', 'Jalapeño crispy': 'Crispy jalapeño', Chipotle: 'Chipotle', 'Serrano y cebolla tatemada': 'Serrano and charred onion', 'Ajo y cebolla': 'Garlic and onion', Habanero: 'Habanero', Ponzu: 'Ponzu',
+};
+
+const ingredientTone = (ingredient) => {
+  const name = ingredient.toLowerCase();
+  if (/atún|salmón|marlín|papada/.test(name)) return 'red';
+  if (/pollo|tampico|chipotle|habanero|toreado|jalapeño|serrano/.test(name)) return 'orange';
+  if (/cebolla|arándano|betabel/.test(name)) return 'purple';
+  if (/pepino|espinaca|lechuga|brócoli|edamame|aguacate|cebollín/.test(name)) return 'green';
+  if (/mango|piña|zanahoria|elote|coco/.test(name)) return 'yellow';
+  if (/arroz|quinoa|crutón|ajo|philadelphia/.test(name)) return 'cream';
+  return 'dark';
 };
 
 const uiCopy = {
@@ -57,6 +69,7 @@ let selectedBase = ['Arroz'];
 let selectedProtein = 'Atún';
 let selectedToppings = [];
 let selectedDressings = ['Ponzu'];
+let selectedCrunch = [];
 let currentLang = 'es';
 
 const $ = (selector, parent = document) => parent.querySelector(selector);
@@ -76,14 +89,14 @@ function renderMenu(category = menu[0].category) {
 function renderBuilder() {
   const options = $('.builder-options');
   if (!options) return;
-  const copy = translations[currentLang]; const values = [bases, proteins, toppings, dressings][builderStep]; const selected = [selectedBase, selectedProtein, selectedToppings, selectedDressings][builderStep]; const isSelected = (value) => Array.isArray(selected) ? selected.includes(value) : selected === value;
-  options.innerHTML = `<h3>${copy.choose[builderStep]}</h3><p class="muted">${copy.instructions[builderStep]}</p><div class="pills">${values.map((value) => { const label = currentLang === 'en' ? (ingredientEnglish[value] || value) : value; return `<button class="pill ${isSelected(value) ? 'selected' : ''}" type="button" aria-pressed="${isSelected(value)}" data-option="${value}">${label}<span aria-hidden="true">${isSelected(value) ? '✓' : '+'}</span></button>`; }).join('')}</div>${builderStep < 3 ? `<button class="next-step" type="button">${copy.next}</button>` : ''}`;
+  const copy = translations[currentLang]; const values = [bases, proteins, toppings, dressings, crunch][builderStep]; const selected = [selectedBase, selectedProtein, selectedToppings, selectedDressings, selectedCrunch][builderStep]; const title = builderStep === 4 ? (currentLang === 'en' ? 'Choose your crunch' : 'Elige tu crujiente') : copy.choose[builderStep]; const instructions = builderStep === 4 ? (currentLang === 'en' ? 'Add texture with your favorite crunchy topping.' : 'Agrega textura con tu crujiente favorito.') : copy.instructions[builderStep]; const isSelected = (value) => Array.isArray(selected) ? selected.includes(value) : selected === value;
+  options.innerHTML = `<h3>${title}</h3><p class="muted">${instructions}</p><div class="pills">${values.map((value) => { const label = currentLang === 'en' ? (ingredientEnglish[value] || value) : value; return `<button class="pill ingredient-option ${isSelected(value) ? 'selected' : ''}" type="button" aria-pressed="${isSelected(value)}" data-option="${value}"><span class="ingredient-thumb tone-${ingredientTone(value)}" aria-hidden="true"></span><span class="ingredient-label">${label}</span><span class="pill-check" aria-hidden="true">${isSelected(value) ? '✓' : ''}</span></button>`; }).join('')}</div>${builderStep < 4 ? `<button class="next-step" type="button">${copy.next}</button>` : ''}`;
   $$('.pill', options).forEach((button) => button.addEventListener('click', () => selectIngredient(button.dataset.option)));
   $('.next-step', options)?.addEventListener('click', () => setBuilderStep(builderStep + 1));
   $('.bowl-count').textContent = `${selectedToppings.length}/4 toppings`;
   const translateIngredients = (items) => items.map((item) => currentLang === 'en' ? (ingredientEnglish[item] || item) : item).join(' · ');
   $('.bowl-preview strong').textContent = `${selectedBase.length ? translateIngredients(selectedBase).replaceAll(' · ', ' + ') : (currentLang === 'en' ? 'Choose a base' : 'Elige una base')} + ${currentLang === 'en' ? ingredientEnglish[selectedProtein] : selectedProtein}`;
-  $('.bowl-preview small').textContent = `${selectedToppings.length ? translateIngredients(selectedToppings) : (currentLang === 'en' ? 'Choose your toppings' : 'Elige tus toppings favoritos')} · ${selectedDressings.length ? translateIngredients(selectedDressings) : (currentLang === 'en' ? 'No dressing' : 'Sin aderezo')}`;
+  $('.bowl-preview small').textContent = `${selectedToppings.length ? translateIngredients(selectedToppings) : (currentLang === 'en' ? 'Choose your toppings' : 'Elige tus toppings favoritos')} · ${selectedDressings.length ? translateIngredients(selectedDressings) : (currentLang === 'en' ? 'No dressing' : 'Sin aderezo')} · ${selectedCrunch.length ? translateIngredients(selectedCrunch) : (currentLang === 'en' ? 'Choose your crunch' : 'Elige tu crujiente')}`;
   updateOrderLink();
 }
 
@@ -92,11 +105,12 @@ function selectIngredient(value) {
   if (builderStep === 1) selectedProtein = value;
   if (builderStep === 2) selectedToppings = selectedToppings.includes(value) ? selectedToppings.filter((item) => item !== value) : selectedToppings.length < 4 ? [...selectedToppings, value] : selectedToppings;
   if (builderStep === 3) selectedDressings = selectedDressings.includes(value) ? selectedDressings.filter((item) => item !== value) : [...selectedDressings, value];
+  if (builderStep === 4) selectedCrunch = selectedCrunch.includes(value) ? selectedCrunch.filter((item) => item !== value) : [...selectedCrunch, value];
   renderBuilder();
 }
 
 function setBuilderStep(step) {
-  builderStep = Math.max(0, Math.min(3, step));
+  builderStep = Math.max(0, Math.min(4, step));
   $$('.step').forEach((button) => { const active = Number(button.dataset.step) === builderStep; button.classList.toggle('active', active); button.setAttribute('aria-current', active ? 'step' : 'false'); });
   renderBuilder();
 }
@@ -108,6 +122,7 @@ function updateOrderLink() {
     `Proteína: ${selectedProtein}`,
     `Toppings: ${selectedToppings.length ? selectedToppings.join(', ') : 'Ninguno'}`,
     `Aderezos: ${selectedDressings.length ? selectedDressings.join(', ') : 'Ninguno'}`,
+    `Crujiente: ${selectedCrunch.length ? selectedCrunch.join(', ') : 'Ninguno'}`,
   ].join('\n');
   const orderLink = $('.bowl-preview .button'); if (orderLink) orderLink.href = waLink(message);
 }
@@ -143,6 +158,8 @@ function applyLanguage(lang) {
   setText('.map-label small', 'Guaymas, Sonora ↗'); setText('#lang-toggle', copy.langButton); $('#lang-toggle')?.setAttribute('aria-label', lang === 'en' ? 'Switch to Spanish' : 'Cambiar a inglés');
   $$('[data-i18n]').forEach((node) => { const value = ui[node.dataset.i18n]; if (value !== undefined) node.textContent = value; });
   $$('[data-i18n-html]').forEach((node) => { const value = ui[node.dataset.i18nHtml]; if (value !== undefined) node.innerHTML = value; });
+  const crunchStep = $('.step[data-step="4"] .step-label');
+  if (crunchStep) crunchStep.textContent = lang === 'en' ? 'Crunch' : 'Crujiente';
   const heroCta = $('.hero-actions .button');
   if (heroCta) { heroCta.textContent = currentLang === 'en' ? 'Build yours →' : 'Arma el tuyo →'; heroCta.href = '#arma'; heroCta.removeAttribute('target'); heroCta.removeAttribute('rel'); }
   normalizeWhatsAppLinks();
@@ -152,6 +169,8 @@ function applyLanguage(lang) {
 
 function init() {
   let savedLanguage = 'es'; try { savedLanguage = localStorage.getItem('mareta-language') === 'en' ? 'en' : 'es'; } catch { /* Ignore unavailable storage. */ }
+  const builderSteps = $('.builder-steps');
+  if (builderSteps && !$('.step[data-step="4"]', builderSteps)) builderSteps.insertAdjacentHTML('beforeend', '<button class="step" type="button" data-step="4"><span>05</span><span class="step-label">Crujiente</span></button>');
   $$('.step').forEach((button) => button.addEventListener('click', () => setBuilderStep(Number(button.dataset.step))));
   const menuToggle = $('.menu-toggle'); const nav = $('.nav');
   if (nav) nav.id = 'primary-nav';
