@@ -1,7 +1,7 @@
 const PHONE_NUMBER = '526221727191';
 const ADDRESS_TEXT = 'Plaza del Mar, Col Miramar Guaymas, Son';
-const MAP_URL = 'https://www.google.com/maps/search/?api=1&query=W3F8%2BVP%20Guaymas%2C%20Sonora';
-const MAP_EMBED_URL = 'https://www.google.com/maps?q=W3F8%2BVP%20Guaymas%2C%20Sonora&output=embed';
+const MAP_URL = 'https://maps.app.goo.gl/ZG3u5W4pVrV2Nu2w7';
+const MAP_EMBED_URL = MAP_URL;
 const menu = [
   { category: 'Favoritos Mareta', items: [
     ['Bowl Mareta', 'Arroz, salmón, mango, edamames, aguacate y aderezo ponzu.', '$189', 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=85', 'Más pedido'],
