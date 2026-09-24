@@ -1,5 +1,5 @@
 const PHONE_NUMBER = '526221727191';
-const ADDRESS_TEXT = 'W3F8+VP · Guaymas, Sonora';
+const ADDRESS_TEXT = 'Plaza del Mar, Col Miramar Guaymas, Son';
 const MAP_URL = 'https://www.google.com/maps/search/?api=1&query=W3F8%2BVP%20Guaymas%2C%20Sonora';
 const MAP_EMBED_URL = 'https://www.google.com/maps?q=W3F8%2BVP%20Guaymas%2C%20Sonora&output=embed';
 const menu = [
