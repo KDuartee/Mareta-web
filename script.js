@@ -1,7 +1,7 @@
 const PHONE_NUMBER = '526221727191';
 const ADDRESS_TEXT = 'Plaza del Mar, Col Miramar Guaymas, Son';
 const MAP_URL = 'https://maps.app.goo.gl/ZG3u5W4pVrV2Nu2w7';
-const MAP_EMBED_URL = MAP_URL;
+const MAP_EMBED_URL = 'https://www.google.com/maps?q=W3F8%2BVP+Guaymas%2C+Sonora&output=embed';
 const menu = [
   { category: 'Favoritos Mareta', items: [
     ['Bowl Mareta', 'Arroz, salmón, mango, edamames, aguacate y aderezo ponzu.', '$189', 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=85', 'Más pedido'],
@@ -139,6 +139,13 @@ function setText(selector, value, html = false) { const node = $(selector); if (
 
 function applyLanguage(lang) {
   currentLang = lang; const copy = translations[lang]; document.documentElement.lang = lang;
+  document.title = lang === 'en' ? 'Mareta Barra express | Your bowl, your rules' : 'Mareta Barra express | Tu bowl, tus reglas';
+  const description = lang === 'en' ? 'Mareta Barra express: build your favorite bowl, poke or snack in Guaymas, Sonora. Order on WhatsApp and pick it up.' : 'Mareta Barra express: arma tu bowl, poke o snack favorito en Guaymas, Sonora. Ordena por WhatsApp y recoge tu pedido.';
+  $('meta[name="description"]')?.setAttribute('content', description);
+  $('meta[property="og:title"]')?.setAttribute('content', document.title);
+  $('meta[property="og:description"]')?.setAttribute('content', description);
+  $('meta[name="twitter:title"]')?.setAttribute('content', document.title);
+  $('meta[name="twitter:description"]')?.setAttribute('content', description);
   try { localStorage.setItem('mareta-language', lang); } catch { /* File previews may not expose storage. */ }
   const ui = uiCopy[lang];
   $$('.nav a').forEach((link, index) => { if (copy.nav[index]) link.textContent = copy.nav[index]; });
